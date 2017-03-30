@@ -8,7 +8,7 @@
   <meta name="description" content="欢迎来到菜鸟大家庭！">
 <meta property="og:type" content="website">
 <meta property="og:title" content="顶级菜鸟">
-<meta property="og:url" content="http://www.neuling.top/index.html">
+<meta property="og:url" content="http://sunyihuan.cn/index.html">
 <meta property="og:site_name" content="顶级菜鸟">
 <meta property="og:description" content="欢迎来到菜鸟大家庭！">
 <meta name="twitter:card" content="summary">
@@ -235,6 +235,126 @@
     </div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-four" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/03/30/four/" class="article-date">
+      <time datetime="2017-03-30T08:23:55.120Z" itemprop="datePublished">2017-03-30</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="认识WXPY"><a href="#认识WXPY" class="headerlink" title="认识WXPY"></a>认识WXPY</h1><h2 id="Bot"><a href="#Bot" class="headerlink" title="Bot"></a>Bot</h2><h2 id="bot-Bot-cache-path-None-console-qr-False"><a href="#bot-Bot-cache-path-None-console-qr-False" class="headerlink" title="bot=Bot(cache_path=None, console_qr=False)"></a><code>bot=Bot(cache_path=None, console_qr=False)</code></h2><pre><code>cache_path 和console_qr为常用参数
+
+cache_path: 设置当前会话的缓存路径。为None（默认）时，则不开启     设为True时，使用默认缓存路径&apos;wxpy.pkl&apos;
+
+console_qr:在终端中显示登陆二维码，需要安装 pillow 模块
+        * 可为整数(int)，表示二维码单元格的宽度，通常为2(当被为True时，也将在内部当作2)。
+        * 也可为负数，表示以反色显示二维码，适用于浅底深字的命令行界面。
+        * 例如: 在大部分 Linux 系统中可设为 `True` 或 2，而在 macOS Terminal 的默认白底配色中，应设为 -2。
+</code></pre><p>Bot对象可以理解为一个Web微信客户端<br>它本身的一些常用参数</p>
+<p>机器人自身：<code>bot.self：&lt;Friend: 小喽啰&gt;</code>：<br>文件传输助手：<code>bot.file_helper：&lt;Chat: 文件传输助手&gt;</code><br>机器人的好友：<code>bot.friends</code><br>机器人的群组：<code>bot.groups</code><br>机器人的公众号：<code>bot.mps</code><br>机器人的聊天集合：<code>bot.charts</code><br>机器人的状态：<code>bot.alive</code></p>
+<p>常用：<br>        <code>bot.register(chats=None, msg_types=None,
+            except_self=True, run_async=True, enabled=True)</code></p>
+<pre><code>装饰器：用于注册消息配置
+
+:param chats: 消息所在的聊天对象：单个或列表形式的多个聊天对象或聊天类型，为空时匹配所有聊天对象
+:param msg_types:(详见Message) 消息的类型：单个或列表形式的多个消息类型，为空时匹配所有消息类型 (SYSTEM 类消息除外)
+:param except_self: 排除由自己发送的消息
+:param run_async: 是否异步执行所配置的函数：可提高响应速度
+:param enabled: 当前配置的默认开启状态，可事后动态开启或关闭
+</code></pre><hr>
+<pre><code>| 关于发送消息，请参见 :doc:`chats`。
+| 关于消息对象和自动处理，请参见 :doc:`messages`。
+</code></pre><h2 id="初始化-登陆"><a href="#初始化-登陆" class="headerlink" title="初始化/登陆"></a>初始化/登陆</h2><pre><code>:class:`Bot` 在初始化时便会执行登陆操作，需要手机扫描登陆。
+</code></pre><h2 id="获取聊天对象"><a href="#获取聊天对象" class="headerlink" title="获取聊天对象"></a>获取聊天对象</h2><p>Bot.self</p>
+<pre><code>机器人自身 (作为一个聊天对象)
+</code></pre><p>Bot.file_helper</p>
+<pre><code>文件传输助手
+</code></pre><p>Bot.friends</p>
+<p>Bot.groups</p>
+<p>Bot.mps</p>
+<p>Bot.chats</p>
+<h2 id="搜索聊天对象"><a href="#搜索聊天对象" class="headerlink" title="搜索聊天对象"></a>搜索聊天对象</h2><pre><code>* 通过 `.search()` 获得的搜索结果 **均为列表**
+* 若希望找到唯一结果，可使用 :any:`ensure_one()`
+</code></pre><p>搜索好友:</p>
+<pre><code># 搜索名称包含 &apos;游否&apos; 的深圳男性好友
+found = bot.friends().search(&apos;游否&apos;, sex=MALE, city=&apos;深圳&apos;)
+# [&lt;Friend: 游否&gt;]
+# 确保搜索结果是唯一的，并取出唯一结果
+youfou = ensure_one(found)
+# &lt;Friend: 游否&gt;
+</code></pre><p>搜索群聊:</p>
+<pre><code># 搜索名称包含 &apos;wxpy&apos;，且成员中包含 `游否` 的群聊对象
+wxpy_groups = bot.groups().search(&apos;wxpy&apos;, [youfou])
+# [&lt;Group: wxpy 交流群 1&gt;, &lt;Group: wxpy 交流群 2&gt;]
+</code></pre><p>在群聊中搜素:</p>
+<pre><code># 在刚刚找到的第一个群中搜索
+group = wxpy_groups[0]
+# 搜索该群中所有浙江的群友
+found = group.search(province=&apos;浙江&apos;)
+# [&lt;Member: 浙江群友 1&gt;, &lt;Group: 浙江群友 2&gt; ...]
+</code></pre><p>搜索任何类型的聊天对象 (但不包含群内成员) :</p>
+<pre><code># 搜索名称含有 &apos;wxpy&apos; 的任何聊天对象
+found = bot.search(&apos;wxpy&apos;)
+# [&lt;Friend: wxpy 机器人&gt;, &lt;Group: wxpy 交流群 1&gt;, &lt;Group: wxpy 交流群 2&gt;]
+</code></pre><h2 id="加好友和建群"><a href="#加好友和建群" class="headerlink" title="加好友和建群"></a>加好友和建群</h2><pre><code>Bot.add_friend
+
+Bot.accept_friend
+</code></pre><p>自动接受好友请求::</p>
+<pre><code># 注册好友请求类消息
+@bot.register(msg_types=FRIENDS)
+# 自动接受验证信息中包含 &apos;wxpy&apos; 的好友请求
+def auto_accept_friends(msg):
+    # 判断好友请求中的验证文本
+    if &apos;wxpy&apos; in msg.text.lower():
+        # 接受好友 (msg.card 为该请求的用户对象)
+        new_friend = bot.accept_friend(msg.card)
+        # 或 new_friend = msg.card.accept()
+        # 向新的好友发送消息
+        new_friend.send(&apos;哈哈，我自动接受了你的好友请求&apos;)
+</code></pre><hr>
+<pre><code>Bot.create_group
+</code></pre><h2 id="更新用户的详细信息"><a href="#更新用户的详细信息" class="headerlink" title="更新用户的详细信息"></a>更新用户的详细信息</h2><pre><code>Bot.user_details
+</code></pre><h2 id="登出"><a href="#登出" class="headerlink" title="登出"></a>登出</h2><pre><code>Bot.logout
+</code></pre><h2 id="控制多个微信-多开"><a href="#控制多个微信-多开" class="headerlink" title="控制多个微信 (多开)"></a>控制多个微信 (多开)</h2><p>仅需初始化多个 :class:<code>Bot</code> 对象，即可同时控制多个微信:</p>
+<pre><code>bot1 = Bot()
+bot2 = Bot()
+</code></pre><p>堵塞进程，直到结束消息监听 (例如，机器人被登出时)</p>
+<pre><code>Bot.join
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-third" class="article article-type-post" itemscope itemprop="blogPost">
   
