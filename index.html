@@ -236,6 +236,264 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Message" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/04/05/Message/" class="article-date">
+      <time datetime="2017-04-05T04:33:44.000Z" itemprop="datePublished">2017-04-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/05/Message/">wxpy-message</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="消息处理"><a href="#消息处理" class="headerlink" title="消息处理"></a>消息处理</h1><p>..  module:: wxpy</p>
+<p>每当机器人接收到消息时，会自动执行以下两个步骤</p>
+<ul>
+<li>将消息保存到 :class:<code>Bot.messages</code> 中</li>
+<li>查找消息预先注册的函数，并执行(若有匹配的函数)</li>
+</ul>
+<h2 id="消息对象"><a href="#消息对象" class="headerlink" title="消息对象"></a>消息对象</h2><p>消息对象代表每一条从微信获取到的消息。</p>
+<p>基本属性</p>
+<p>..  attribute:: Message.type</p>
+<pre><code>消息的类型，目前可为以下值::
+
+    # 文本
+    TEXT = &apos;Text&apos;
+    # 位置
+    MAP = &apos;Map&apos;
+    # 名片
+    CARD = &apos;Card&apos;
+    # 提示
+    NOTE = &apos;Note&apos;
+    # 分享
+    SHARING = &apos;Sharing&apos;
+    # 图片
+    PICTURE = &apos;Picture&apos;
+    # 语音
+    RECORDING = &apos;Recording&apos;
+    # 文件
+    ATTACHMENT = &apos;Attachment&apos;
+    # 视频
+    VIDEO = &apos;Video&apos;
+    # 好友请求
+    FRIENDS = &apos;Friends&apos;
+    # 系统
+    SYSTEM = &apos;System&apos;
+</code></pre><p>..  attribute:: Message.create_time</p>
+<pre><code>消息的发送时间戳
+</code></pre><p>..  attribute:: Message.bot</p>
+<pre><code>接收此消息的 :class:`机器人对象 &lt;Bot&gt;`
+</code></pre><p>..  attribute:: Message.id</p>
+<pre><code>消息的唯一ID
+</code></pre><p>内容数据</p>
+<p>..  attribute:: Message.text</p>
+<pre><code>消息的文本内容
+</code></pre><p>..  method:: Message.get_file(save_path=None)</p>
+<pre><code>下载消息中的文件(图片、视频等)。
+
+可与 :any:`Message.file_name` 配合使用。
+
+:param save_path: 文件的保存路径，若为 `None`，将直接返回字节数据
+</code></pre><p>..  attribute:: Message.file_name</p>
+<pre><code>消息中的文件的文件名
+</code></pre><p>..  attribute:: Message.file_size</p>
+<pre><code>消息中的文件体积大小
+</code></pre><p>..  attribute:: Message.media_id</p>
+<pre><code>消息中的文件 media_id，可用于转发消息
+</code></pre><p>..  attribute:: Message.raw</p>
+<pre><code>原始数据 (dict 数据)
+</code></pre><p>用户相关</p>
+<p>..  autoattribute:: Message.chat</p>
+<p>..  autoattribute:: Message.sender</p>
+<p>..  autoattribute:: Message.receiver</p>
+<p>..  autoattribute:: Message.member</p>
+<p>..  attribute:: Message.card</p>
+<pre><code>* 好友请求中的请求用户
+* 名片消息中的推荐用户
+</code></pre><p>群聊相关</p>
+<p>..  autoattribute:: Message.member</p>
+<p>..  attribute:: Message.is_at</p>
+<pre><code>当消息来自群聊，且被 @ 时，为 True
+</code></pre><p>其他属性</p>
+<p>..  attribute:: Message.url</p>
+<pre><code>分享消息中的网页 URL
+</code></pre><p>..  attribute:: Message.location</p>
+<pre><code>位置消息中的地理位置信息
+</code></pre><p>..  attribute:: Message.img_height</p>
+<pre><code>图片高度
+</code></pre><p>..  attribute:: Message.img_width</p>
+<pre><code>图片宽度
+</code></pre><p>..  attribute:: Message.play_length</p>
+<pre><code>视频长度
+</code></pre><p>..  attribute:: Message.voice_length</p>
+<pre><code>语音长度
+</code></pre><p>回复方法</p>
+<p>..  method:: Message.reply(…)</p>
+<pre><code>等同于 :meth:`Message.chat.send(...) &lt;Chat.send&gt;`
+</code></pre><p>..  method:: Message.reply_image(…)</p>
+<pre><code>等同于 :meth:`Message.chat.send_image(...) &lt;Chat.send_image&gt;`
+</code></pre><p>..  method:: Message.reply_file(…)</p>
+<pre><code>等同于 :meth:`Message.chat.send_file(...) &lt;Chat.send_file&gt;`
+</code></pre><p>..  method:: Message.reply_video(…)</p>
+<pre><code>等同于 :meth:`Message.chat.send_video(...) &lt;Chat.send_video&gt;`
+</code></pre><p>..  method:: Message.reply_msg(…)</p>
+<pre><code>等同于 :meth:`Message.chat.send_msg(...) &lt;Chat.send_msg&gt;`
+</code></pre><p>..  method:: Message.reply_raw_msg(…)</p>
+<pre><code>等同于 :meth:`Message.chat.send_raw_msg(...) &lt;Chat.send_raw_msg&gt;`
+</code></pre><p>转发消息</p>
+<p>..  automethod:: Message.forward</p>
+<h2 id="自动处理消息"><a href="#自动处理消息" class="headerlink" title="自动处理消息"></a>自动处理消息</h2><p>可通过 <strong>预先注册</strong> 的方式，实现消息的自动处理。</p>
+<p>“预先注册” 是指<br>    预先将特定聊天对象的特定类型消息，注册到对应的处理函数，以实现自动回复等功能。</p>
+<p>注册消息</p>
+<p>..  hint::</p>
+<pre><code>| 每当收到新消息时，将根据注册规则找到匹配条件的执行函数。
+| 并将 :class:`消息对象 &lt;Message&gt;` 作为唯一参数传入该函数。
+</code></pre><p>将 :meth:<code>Bot.register</code> 作为函数的装饰器，即可完成注册。</p>
+<p>::</p>
+<pre><code># 打印所有*群聊*对象中的*文本*消息
+@bot.register(Group, TEXT)
+def print_group_msg(msg):
+    print(msg)
+</code></pre><p>..  attention:: 优先匹配 <strong>后注册</strong> 的函数，且仅匹配 <strong>一个</strong> 注册函数。</p>
+<p>..  automethod:: Bot.register</p>
+<p>..  tip::</p>
+<pre><code>1.  `chats` 和 `msg_types` 参数可以接收一个列表或干脆一个单项。按需使用，方便灵活。
+2.  `chats` 参数既可以是聊天对象实例，也可以是对象类。当为类时，表示匹配该类型的所有聊天对象。
+3. 在被注册函数中，可以通过直接 `return &lt;回复内容&gt;` 的方式来回复消息，等同于调用 `msg.reply(&lt;回复内容&gt;)`。
+</code></pre><p>开始运行</p>
+<p>..  note::</p>
+<pre><code>| 在完成注册操作后，若没有其他操作，程序会因主线程执行完成而退出。
+| **因此务必堵塞线程以保持监听状态！**
+| wxpy 的 :any:`embed()` 可在堵塞线程的同时，进入 Python 命令行，方便调试，一举两得。
+</code></pre><p>::</p>
+<pre><code>from wxpy import *
+
+bot = Bot()
+
+@bot.register()
+def print_messages(msg):
+    print(msg)
+
+# 堵塞线程，并进入 Python 命令行
+embed()
+</code></pre><p>..  autofunction:: embed</p>
+<p>示例代码</p>
+<p>在以下例子中，机器人将</p>
+<ul>
+<li>忽略 “一个无聊的群” 的所有消息</li>
+<li>回复好友 “游否” 和其他群聊中被 @ 的 TEXT 类消息</li>
+<li>打印所有其他消息</li>
+</ul>
+<p>初始化机器人，并找到好友和群聊::</p>
+<pre><code>from wxpy import *
+bot = Bot()
+my_friend = bot.friends().search(&apos;游否&apos;)[0]
+boring_group = bot.groups().search(&apos;一个无聊的群&apos;)[0]
+</code></pre><p>打印所有其他消息::</p>
+<pre><code>@bot.register()
+def just_print(msg):
+    # 打印消息
+    print(msg)
+</code></pre><p>回复好友”游否”和其他群聊中被 @ 的 TEXT 类消息::</p>
+<pre><code>@bot.register([my_friend, Group], TEXT)
+def auto_reply(msg):
+    # 如果是群聊，但没有被 @，则不回复
+    if isinstance(msg.chat, Group) and not msg.is_at:
+        return
+    else:
+        # 回复消息内容和类型
+        return &apos;收到消息: {} ({})&apos;.format(msg.text, msg.type)
+</code></pre><p>忽略”一个无聊的群”的所有消息::</p>
+<pre><code>@bot.register(boring_group)
+def ignore(msg):
+    # 啥也不做
+    return
+</code></pre><p>堵塞线程，并进入 Python 命令行::</p>
+<pre><code>embed()
+</code></pre><p>动态开关注册配置</p>
+<p>..  note:: 该操作需要在额外的线程中进行！</p>
+<p>查看当前的注册配置情况::</p>
+<pre><code>bot.registered
+# [&lt;MessageConfig: just_print (Async, Enabled)&gt;,
+#  &lt;MessageConfig: auto_reply (Async, Enabled)&gt;,
+#  &lt;MessageConfig: ignore (Async, Enabled)&gt;]
+</code></pre><p>关闭所有注册配置::</p>
+<pre><code>bot.registered.disable()
+</code></pre><p>重新开启 <code>just_print</code> 函数::</p>
+<pre><code>bot.registered.enable(just_print)
+</code></pre><p>查看当前开启的注册配置::</p>
+<pre><code>bot.registered.enabled
+# [&lt;MessageConfig: just_print (Async, Enabled)&gt;]
+</code></pre><p>..  autoclass:: wxpy.api.messages.Registered<br>    :members:</p>
+<h2 id="历史消息"><a href="#历史消息" class="headerlink" title="历史消息"></a>历史消息</h2><p>可通过访问 <code>bot.messages</code> 来查看历史消息列表。</p>
+<p>消息列表为 :class:<code>Messages</code> 对象，具有搜索功能。</p>
+<p>例如，搜索所有自己在手机上发出的消息::</p>
+<pre><code>sent_msgs = bot.messages.search(sender=bot.self)
+print(sent_msgs)
+</code></pre><p>..  autoclass:: Messages</p>
+<pre><code>..  attribute:: max_history
+
+    设置最大保存条数，即：仅保存最后的 n 条消息。
+
+    ::
+
+        bot = Bot()
+        # 设置历史消息的最大保存数量为 10000 条
+        bot.messages.max_history = 10000
+
+..  automethod:: search
+
+    ::
+
+        # 搜索所有自己发送的，文本中包含 &apos;wxpy&apos; 的消息
+        bot.messages.search(&apos;wxpy&apos;, sender=bot.self)
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/菜鸟入门/">菜鸟入门</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-four" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
